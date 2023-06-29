@@ -244,9 +244,15 @@ function encodeToRot13(str) {
   let result = '';
   for (let i = 0; i < str.length; i += 1) {
     const temp = str.charAt(i);
-    result += String.fromCharCode(13 + String.prototype.charCodeAt(temp));
+    if (temp >= 'A' && temp <= 'Z') {
+      result += String.fromCharCode(((temp.charCodeAt(0) - 'A'.charCodeAt(0) + 13) % 26) + 'A'.charCodeAt(0));
+    } else if (temp >= 'a' && temp <= 'z') {
+      result += String.fromCharCode(((temp.charCodeAt(0) - 'a'.charCodeAt(0) + 13) % 26) + 'a'.charCodeAt(0));
+    } else {
+      result += temp;
+    }
   }
-  return String.fromCharCode(13) + result;
+  return result;
 }
 
 /**
@@ -262,8 +268,8 @@ function encodeToRot13(str) {
  *   isString('test') => true
  *   isString(new String('test')) => true
  */
-function isString(/* value */) {
-  throw new Error('Not implemented');
+function isString(value) {
+  return typeof value === 'string' || value instanceof String;
 }
 
 /**
@@ -290,8 +296,9 @@ function isString(/* value */) {
  *   'Q♠' => 50
  *   'K♠' => 51
  */
-function getCardId(/* value */) {
-  throw new Error('Not implemented');
+function getCardId(value) {
+  const cards = ['A♣', '2♣', '3♣', '4♣', '5♣', '6♣', '7♣', '8♣', '9♣', '10♣', 'J♣', 'Q♣', 'K♣', 'A♦', '2♦', '3♦', '4♦', '5♦', '6♦', '7♦', '8♦', '9♦', '10♦', 'J♦', 'Q♦', 'K♦', 'A♥', '2♥', '3♥', '4♥', '5♥', '6♥', '7♥', '8♥', '9♥', '10♥', 'J♥', 'Q♥', 'K♥', 'A♠', '2♠', '3♠', '4♠', '5♠', '6♠', '7♠', '8♠', '9♠', '10♠', 'J♠', 'Q♠', 'K♠'];
+  return cards.indexOf(value);
 }
 
 module.exports = {
